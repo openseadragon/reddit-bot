@@ -1,0 +1,5 @@
+app_key = 'the_app_key'
+app_secret = 'the_app_secret'
+access_token = 'the_access_token'
+refresh_token = 'the_refresh_token'
+scopes = ['read', 'submit', 'identity']
