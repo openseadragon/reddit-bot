@@ -12,7 +12,7 @@ db_cursor.execute("CREATE TABLE IF NOT EXISTS processed_submissions " + \
                   "(id TEXT PRIMARY KEY)")
 db_conn.commit()
 
-subreddit = 'all'
+subreddit = 'earthporn+mapporn+space'
 
 user_agent = "OpenSeadragonizer:v0.0.0 (by /u/openseadragonizer)"
 r = praw.Reddit(user_agent = user_agent)
