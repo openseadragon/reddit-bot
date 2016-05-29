@@ -1,3 +1,5 @@
+import sys
+import logging
 import praw
 import time
 import traceback
@@ -5,12 +7,17 @@ import sqlite3
 from prawoauth2 import PrawOAuth2Mini
 from settings import app_key, app_secret, access_token, refresh_token, scopes
 
+logging.basicConfig(filename = 'bot.log', level=logging.INFO)
+logging.info('Starting openseadragonizer reddit bot.')
+
 db_conn = sqlite3.connect('sqlite.db')
 db_cursor = db_conn.cursor()
 
 db_cursor.execute("CREATE TABLE IF NOT EXISTS processed_submissions " + \
                   "(id TEXT PRIMARY KEY)")
 db_conn.commit()
+logging.info('SQLite connection initialized.')
+
 
 subreddit = 'earthporn+mapporn+space'
 
@@ -18,6 +25,7 @@ user_agent = "OpenSeadragonizer:v0.0.0 (by /u/openseadragonizer)"
 r = praw.Reddit(user_agent = user_agent)
 oauth_helper = PrawOAuth2Mini(r, app_key=app_key, app_secret=app_secret,
     access_token=access_token, refresh_token=refresh_token, scopes=scopes)
+logging.info('OAuth connection ready.')
 
 min_width = 2000
 min_height = 2000
@@ -44,11 +52,13 @@ while True:
                     db_cursor.execute("INSERT INTO processed_submissions(id) VALUES (?)",\
                         (submission.id,))
                     db_conn.commit()
-                    print("Posted comment in submission titled " +  submission.title)
+                    logging.info("Posted comment in submission titled " +  submission.title)
+        logging.info('Going to sleep')
         time.sleep(30)
     except praw.errors.OAuthInvalidToken:
         # token expired, refresh 'em!
         oauth_helper.refresh()
+        logging.info('Token refreshed')
     except Exception:
-        traceback.print_exc()
+        logging.exception('Unexpected exception, going to sleep.')
         time.sleep(30)
