@@ -19,7 +19,7 @@ db_conn.commit()
 logging.info('SQLite connection initialized.')
 
 
-subreddit = 'earthporn+mapporn+space+warshipporn+warplaneporn'
+subreddit = 'mapporn+warshipporn+warplaneporn'
 
 user_agent = "OpenSeadragonizer:v0.0.0 (by /u/openseadragonizer)"
 r = praw.Reddit(user_agent = user_agent)
